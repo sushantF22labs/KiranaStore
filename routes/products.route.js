@@ -6,16 +6,17 @@ const { ProductModel } = require("../models/product.model");
 const productController = Router();
 
 productController.get("/", async (req, res) => {
-  let {page,limit}= req.query;
-  const result = await ProductModel.find().skip(page).limit(limit);
-  
-    res.send(result);
+  let {skip,limit}= req.query;
+  const result = await ProductModel.find().skip(skip).limit(limit);
+  const count= await ProductModel.find().count()
+    res.send({result,count});
 })
 
 productController.get("/:id", async (req, res) => {
-  let {page,limit}= req.query;
-  const result = await ProductModel.findById(req.params.id).skip(page).limit(limit);
-    res.send(result);
+  let {skip,limit}= req.query;
+  const result = await ProductModel.findById(req.params.id).skip(skip).limit(limit);
+  const count= await ProductModel.find().count()
+  res.send({result,count});
 });
 
 productController.post("/", async (req, res) => {
@@ -35,7 +36,6 @@ productController.put("/:id",async(req,res)=>{
   const data=await ProductModel.findByIdAndUpdate(req.params.id,req.body)
   console.log(data);
   res.send("product updated")
-    res.send("put is working");
 })
 
 productController.delete("/:id", async (req, res) => {
