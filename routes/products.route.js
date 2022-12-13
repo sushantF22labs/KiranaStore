@@ -28,19 +28,20 @@ productController.post("/", async (req, res) => {
 
 productController.patch("/:id",async(req,res)=>{
    const data=await ProductModel.findByIdAndUpdate(req.params.id,req.body)
-  console.log(data);
-  res.send("product updated")
+  console.log("product updated");
+  res.send(data)
 })
 
 productController.put("/:id",async(req,res)=>{
   const data=await ProductModel.findByIdAndUpdate(req.params.id,req.body)
-  console.log(data);
-  res.send("product updated")
+  console.log("product updated");
+  res.send(data)
 })
 
 productController.delete("/:id", async (req, res) => {
   const deletedProd = await ProductModel.findOneAndDelete({_id: req.params.id})
   res.send(deletedProd);
+  console.log("product deleted");
 })
 
 module.exports = { productController };
