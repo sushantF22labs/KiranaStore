@@ -8,7 +8,14 @@ const productController = Router();
 productController.get("/", async (req, res) => {
   let {page,limit}= req.query;
   const result = await ProductModel.find().skip(page).limit(limit);
-  res.send(result);
+  
+    res.send(result);
+})
+
+productController.get("/:id", async (req, res) => {
+  let {page,limit}= req.query;
+  const result = await ProductModel.findById(req.params.id).skip(page).limit(limit);
+    res.send(result);
 });
 
 productController.post("/", async (req, res) => {
@@ -31,17 +38,9 @@ productController.put("/:id",async(req,res)=>{
     res.send("put is working");
 })
 
-productController.delete("/delete/:itemId", async (req, res) => {
-  const {prodId} = req.params
-  const deletedProd = await ProductModel.findOneAndDelete({_id : itemId, prodId : req.body.prodId})
-  if(deletedProd){
-      res.status(200).send("Deleted")
-  }
-  else{
-      res.send("couldn't delete")
-  }
+productController.delete("/:id", async (req, res) => {
+  const deletedProd = await ProductModel.findOneAndDelete({_id: req.params.id})
+  res.send(deletedProd);
 })
-
-
 
 module.exports = { productController };
