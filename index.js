@@ -3,9 +3,10 @@ const {connection} = require("./config/db");
 const { productController } = require("./routes/products.route");
 require('dotenv').config()
 const app= express()
+var cors = require('cors')
 const PORT= process.env.PORT || 8080;
 app.use(express.json());
-
+app.use(cors())     
 app.get("/", (req,res)=>{
     res.send("welcome to homepage")
     console.log("Welcome to Homepage");
