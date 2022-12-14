@@ -14,18 +14,6 @@ productController.get("/", async (req, res) => {
     res.send({data,count});
 
 })
-// Search functionality
-productController.get("/:key", async (req, res) => {
-  console.log(req.params.key);
-  const data = await ProductModel.find(
-    {
-      "$or":[
-        {"title":{$regex: req.params.key}}
-      ]
-    }
-  )
-  res.send(data)
-});
 
 //getting data by _id
 productController.get("/:id", async (req, res) => {
@@ -35,6 +23,20 @@ productController.get("/:id", async (req, res) => {
   res.send({result,count});
 });
 
+// // Search functionality
+// productController.get("/:key", async (req, res) => {
+//   console.log(req.params.key);
+//   const data = await ProductModel.find(
+//     {
+//       "$or":[
+//         {"title":{$regex: req.params.key}},
+//         {"price":{$regex: req.params.key}},
+//         {"quality":{$regex: req.params.key}}
+//       ]
+//     }
+//   )
+//   res.send(data)
+// });
 //Adding data
 productController.post("/", async (req, res) => {
   const payload = req.body;
