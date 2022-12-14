@@ -8,9 +8,7 @@ const productController = Router();
 productController.get("/", async (req, res) => {
   let {skip,limit}= req.query;
   const data = await ProductModel.find().skip(skip).limit(limit);
-
   const count= await ProductModel.find().count();
-
     res.send({data,count});
 
 })
@@ -23,21 +21,21 @@ productController.get("/:id", async (req, res) => {
   res.send({result,count});
 });
 
-// // Search functionality
-// productController.get("/:key", async (req, res) => {
-//   console.log(req.params.key);
-//   const data = await ProductModel.find(
-//     {
-//       "$or":[
-//         {"title":{$regex: req.params.key}},
-//         {"price":{$regex: req.params.key}},
-//         {"quality":{$regex: req.params.key}}
-//       ]
-//     }
-//   )
-//   res.send(data)
-// });
-//Adding data
+// Search functionality
+productController.get("/:key", async (req, res) => {
+  console.log(req.params.key);
+  const data = await ProductModel.find(
+    {
+      "$or":[
+        {"title":{$regex: req.params.key}},
+        {"price":{$regex: req.params.key}},
+        {"quality":{$regex: req.params.key}}
+      ]
+    }
+  )
+  res.send(data)
+});
+//Add data Post operation
 productController.post("/", async (req, res) => {
   const payload = req.body;
   const new_prod = new ProductModel(payload);
