@@ -28,8 +28,7 @@ productController.get("/:key", async (req, res) => {
     {
       "$or":[
         {"title":{$regex: req.params.key}},
-        {"price":{$regex: req.params.key}},
-        {"quality":{$regex: req.params.key}}
+        {"price":{$regex: req.params.key}}
       ]
     }
   )
