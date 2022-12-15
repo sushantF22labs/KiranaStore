@@ -34,7 +34,7 @@ productController.get("/:key", async (req, res) => {
   )
   res.send(data)
 });
-//Add data Post operation
+//Add data Post operation added new data
 productController.post("/", async (req, res) => {
   const payload = req.body;
   const new_prod = new ProductModel(payload);
