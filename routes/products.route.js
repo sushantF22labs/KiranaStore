@@ -5,13 +5,44 @@ const { ProductModel } = require("../models/product.model");
 
 const productController = Router();
 // Getting data
-productController.get("/", async (req, res) => {
-  let {skip,limit}= req.query;
-  const data = await ProductModel.find().skip(skip).limit(limit);
-  const count= await ProductModel.find().count();
-    res.send({data,count});
+// productController.get("/", async (req, res) => {
+//   let {skip,limit}= req.query;
+//   const data = await ProductModel.find().skip(skip).limit(limit);
+//   const count= await ProductModel.find().count();
+//     res.send({data,count});
 
-})
+
+
+// })
+// Search functionality
+productController.get("/", async (req,res) => {
+  let { page, limit } = req.query;
+  console.log(req.query.title);
+  console.log(req.query.price);
+  try {
+     if (req.query.title) {
+      const data = await ProductModel.find({
+        title: { $regex: req.query.title },
+      });
+      res.send({ data: data });
+    } else if (req.query.title && req.query.price) {
+      const data = await ProductModel.find({
+        $and: [
+          { title: { $regex: req.query.title } },
+          { price: { $regex: req.query.price } },
+        ],
+      });
+      res.send({ data: data });
+    }else {
+      let data = await ProductModel.find().skip(page).limit(limit);
+      let count = await ProductModel.find().count();
+      res.status(200).send({ data: data, totalCount: count });
+    }
+  } catch {
+    res.status(204).send({ message: "data not found" });
+  }
+});
+
 
 //getting data by _id
 productController.get("/:id", async (req, res) => {
@@ -21,19 +52,6 @@ productController.get("/:id", async (req, res) => {
   res.send({result,count});
 });
 
-// Search functionality
-productController.get("/:key", async (req, res) => {
-  console.log(req.params.key);
-  const data = await ProductModel.find(
-    {
-      "$or":[
-        {"title":{$regex: req.params.key}},
-        {"price":{$regex: req.params.key}}
-      ]
-    }
-  )
-  res.send(data)
-});
 //Add data Post operation added new data
 productController.post("/", async (req, res) => {
   const payload = req.body;
